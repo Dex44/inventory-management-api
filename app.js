@@ -13,6 +13,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
+app.get('/', (req, res) => {
+  res.status(200).json({
+    success: true,
+    statusCode: 200,
+    data: 'Inventory management system',
+});
+});
 app.use("/api", indexRouter);
 
 module.exports = app;
