@@ -1,20 +1,21 @@
-const UserModel = require('../models/user.model');
+// const UserModel = require('../models/user.model');
+const { User } = require('../models/mysql');
 const cacheUtil = require('../utils/cache.util');
 
 exports.createUser = (user) => {
-    return UserModel.create(user);
+    return User.create(user);
 }
 
 exports.findUserByEmail = (email) => {
-    return UserModel.findOne({
+    return User.findOne({
         where: {
             email: email
         }
     })
 }
 
-exports.findUserById = (id) => {
-    return UserModel.findByPk(id);
+exports.findUserById = (user_id) => {
+    return User.findByPk(user_id);
 }
 
 exports.logoutUser = (token, exp) => {

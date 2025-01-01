@@ -10,7 +10,7 @@
     "url": "git+https://github.com/Dex44/inventory-management-api.git"
   },
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node app.js"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
