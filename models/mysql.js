@@ -57,6 +57,9 @@ const User = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    token: {
+      type: DataTypes.STRING,
+    },
     role_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -241,6 +244,19 @@ Permission.belongsToMany(Role, {
 
 User.hasMany(AuditLog, { foreignKey: "user_id" });
 AuditLog.belongsTo(User, { foreignKey: "user_id" });
+
+// Associations
+Role.hasMany(RolePermission, { foreignKey: 'role_id' });
+RolePermission.belongsTo(Role, { foreignKey: 'role_id' });
+
+Permission.hasMany(RolePermission, { foreignKey: 'permission_id' });
+RolePermission.belongsTo(Permission, { foreignKey: 'permission_id' });
+
+Role.hasMany(User, { foreignKey: 'role_id' });
+User.belongsTo(Role, { foreignKey: 'role_id' });
+
+User.hasMany(User, { foreignKey: 'created_by', as: 'CreatedBy' });
+
 
 module.exports = { Role, User, Permission, RolePermission, Product, AuditLog, DbBootstrap };
 
