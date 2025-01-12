@@ -2,13 +2,37 @@ const UserService = require("../services/user.service");
 const AuthService = require("../services/auth.service");
 const bcryptUtil = require("../utils/bcrypt.util");
 
-exports.getUser = async (req, res) => {
-  const user = await UserService.getUserDetails();
-  return res.json({
-    data: user,
-    message: "Success.",
-  });
+exports.listUsers = async (req, res) => {
+  try {
+    const { page = 1, limit = 10 } = req.params; // Default values: page 1, 10 users per page
+    const offset = (page - 1) * limit;
+
+    const users = await UserService.getUserDetailsWithPagination(limit, offset);
+
+    if (!users) {
+      return res.status(400).json({
+        message: "No users found.",
+      });
+    }
+
+    const totalUsers = await UserService.getTotalUserCount();
+
+    return res.json({
+      data: users,
+      pagination: {
+        total: totalUsers,
+        page: parseInt(page),
+        limit: parseInt(limit),
+        totalPages: Math.ceil(totalUsers / limit),
+      },
+      message: "Success.",
+    });
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    return res.status(500).json({ message: "Internal Server Error." });
+  }
 };
+
 
 exports.createUser = async (req, res) => {
   const isExist = await AuthService.findUserByEmail(req.body.email);
@@ -62,5 +86,20 @@ exports.deleteUser = async (req, res) => {
   await UserService.deactivateUser(req.body.user_id);
   return res.json({
     message: "User deleted successfully.",
+  });
+};
+
+exports.getUserById = async (req, res) => {
+  const { id } = req.params;
+  const user = await AuthService.findUserById(id);
+  if (!user) {
+    return res.status(400).json({
+      message: "User does not exists.",
+    });
+  }
+
+  return res.json({
+    data: user,
+    message: "User fetched successfully.",
   });
 };

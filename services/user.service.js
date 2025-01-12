@@ -70,4 +70,29 @@ exports.deactivateUser = (id) => {
     );
   };
   
+  exports.getUserDetailsWithPagination = async (limit, offset) => {
+    return User.findAll({
+      where: {
+        is_active: true,
+      },
+      attributes: ["user_id", "username", "email", "is_active", "created_at"],
+      limit: parseInt(limit),
+      offset: parseInt(offset),
+      include: [
+        {
+          model: Role,
+          attributes: ["role_name"],
+        },
+      ],
+    });
+  };
+
+  exports.getTotalUserCount = async () => {
+    return User.count({
+      where: {
+        is_active: true, // Filter to count only active users
+      },
+    });
+  };
+  
   

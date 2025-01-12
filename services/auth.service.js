@@ -117,10 +117,12 @@ exports.getUserDetailsById = async (userId) => {
     return User.findOne({
       where: {
         user_id: user_id,
-        is_active: true,
+        is_active: true, // Ensure the user is active
       },
+      attributes: ["user_id", "username", "email", "role_id", "created_at"], // Specify only required attributes
     });
   };
+  
 
 exports.logoutUser = (token, exp) => {
     const now = new Date();
