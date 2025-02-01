@@ -26,7 +26,7 @@ exports.createProduct = async (req, res) => {
 
 exports.updateProduct = async (req, res) => {
     
-    const isExist = await ProductService.findProduct(req.body.product_name);
+    const isExist = await ProductService.findProduct(req.body.product_id);
     if (!isExist) {
       return res.status(400).json({
         message: "Product does not exists.",
@@ -39,7 +39,7 @@ exports.updateProduct = async (req, res) => {
       price: req.body.price,
       updated_by: req.user.id,
     };
-  
+   
     await ProductService.updateProduct(productData,isExist.product_id);
     return res.json({
       message: "Product updated successfully.",
@@ -47,7 +47,7 @@ exports.updateProduct = async (req, res) => {
   };
 
   exports.deleteProduct = async (req, res) => {
-    const isExist = await ProductService.findProduct(req.body.product_name);
+    const isExist = await ProductService.findProduct(req.body.product_id);
     if (!isExist) {
       return res.status(400).json({
         message: "Product does not exists.",

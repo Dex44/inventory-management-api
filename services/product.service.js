@@ -4,10 +4,10 @@ exports.createProduct = (product) => {
   return Product.create(product);
 };
 
-exports.findProduct = (product_name) => {
+exports.findProduct = (product_id) => {
   return Product.findOne({
     where: {
-      product_name: product_name,
+      product_id: product_id,
     },
   });
 };
@@ -46,6 +46,7 @@ exports.getProductsWithPagination = async (limit, offset) => {
     attributes: [
       "product_id",
       "product_name",
+      "description",
       "price",
       "quantity",
       "created_at",

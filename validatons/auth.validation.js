@@ -41,12 +41,13 @@ module.exports = {
     price: Joi.number().required(),
   }),
   updateProduct: Joi.object().keys({
+    product_id: Joi.number().required(),
     product_name: Joi.string().required(),
     description: Joi.string().required(),
     quantity: Joi.number().required(),
     price: Joi.number().required(),
   }),
   deleteProduct: Joi.object().keys({
-    product_name: Joi.string().required(),
+    product_id: Joi.number().required(),
   }),
 };
