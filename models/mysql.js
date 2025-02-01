@@ -225,6 +225,30 @@ const AuditLog = sequelize.define(
   }
 );
 
+// Product image model
+const ProductImage = sequelize.define('ProductImage', {
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true
+  },
+  product_id: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: Product,
+      key: 'product_id'
+    },
+    onDelete: 'CASCADE'
+  },
+  image_path: {
+    type: DataTypes.STRING,
+    allowNull: false
+  }
+}, {
+  timestamps: false
+});
+
 // Associations
 Role.hasMany(User, { foreignKey: "role_id" });
 User.belongsTo(Role, { foreignKey: "role_id" });
@@ -232,6 +256,9 @@ User.belongsTo(Role, { foreignKey: "role_id" });
 User.hasMany(Product, { foreignKey: "created_by" });
 Product.belongsTo(User, { as: "Creator", foreignKey: "created_by" });
 Product.belongsTo(User, { as: "Updater", foreignKey: "updated_by" });
+
+Product.hasMany(ProductImage, { foreignKey: 'product_id', as: 'images' });
+ProductImage.belongsTo(Product, { foreignKey: 'product_id' });
 
 Role.belongsToMany(Permission, {
   through: RolePermission,
@@ -258,7 +285,7 @@ User.belongsTo(Role, { foreignKey: 'role_id' });
 User.hasMany(User, { foreignKey: 'created_by', as: 'CreatedBy' });
 
 
-module.exports = { Role, User, Permission, RolePermission, Product, AuditLog, DbBootstrap };
+module.exports = { Role, User, Permission, RolePermission, Product, AuditLog, ProductImage, DbBootstrap };
 
 
 (async () => {

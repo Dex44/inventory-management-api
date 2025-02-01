@@ -23,6 +23,7 @@ app.get('/', (req, res) => {
 });
 });
 app.use("/api", indexRouter);
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 module.exports = app;
 MYSQL_CONFIG.DbBootstrap()

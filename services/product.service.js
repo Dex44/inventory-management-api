@@ -1,4 +1,4 @@
-const { Product } = require("../models/mysql");
+const { Product, ProductImage } = require("../models/mysql");
 
 exports.createProduct = (product) => {
   return Product.create(product);
@@ -55,3 +55,12 @@ exports.getProductsWithPagination = async (limit, offset) => {
     offset: parseInt(offset, 10), // Ensure `offset` is parsed as an integer
   });
 };
+
+// In ProductService
+exports.getProductImages = async (product_id) => {
+  return await ProductImage.findAll({
+    where: { product_id: product_id },
+    attributes: ['image_path','id'],
+  });
+}
+
