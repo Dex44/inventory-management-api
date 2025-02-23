@@ -2,7 +2,7 @@ const RoleService = require("../services/role.service");
 
 exports.listRoles = async (req, res) => {
   try {
-    const { page = 1, limit = 10 } = req.params;
+    const { page = 1, limit = 10 } = req.body;
 
     const offset = (page - 1) * limit;
     const roles = await RoleService.getRolesWithPagination(limit, offset);

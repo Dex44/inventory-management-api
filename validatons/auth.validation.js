@@ -39,13 +39,6 @@ module.exports = {
     description: Joi.string().trim().optional(),
     quantity: Joi.number().integer().positive().required(),
     price: Joi.number().positive().required(),
-    images: Joi.array().items(
-      Joi.object({
-        originalname: Joi.string().required(),
-        mimetype: Joi.string().valid('image/jpeg', 'image/png', 'image/jpg').required(),
-        size: Joi.number().max(2 * 1024 * 1024) // Max 2MB
-      })
-    ).min(1).max(5) // Min 1 image, max 5 images
   }),
   updateProduct: Joi.object().keys({
     product_id: Joi.number().required(),
@@ -53,6 +46,7 @@ module.exports = {
     description: Joi.string().required(),
     quantity: Joi.number().required(),
     price: Joi.number().required(),
+    action: Joi.string().required(),
   }),
   deleteProduct: Joi.object().keys({
     product_id: Joi.number().required(),
@@ -88,5 +82,36 @@ module.exports = {
         }),
         otherwise: Joi.optional()
       }),
+  }),
+  createClient: Joi.object({
+    name: Joi.string().trim().required(),
+    mobile: Joi.string().required(),
+    email: Joi.string().email().required(),
+    address: Joi.string().required(),
+  }),
+  updateClient: Joi.object().keys({
+    id: Joi.number().required(),
+    name: Joi.string().required(),
+    email: Joi.string().email().required(),
+    mobile: Joi.string().required(),
+    address: Joi.string().required(),
+  }),
+  deleteClient: Joi.object().keys({
+    id: Joi.number().required(),
+  }),
+  createInvoice: Joi.object({
+    created_by: Joi.number().required(),
+    amount: Joi.number().required(),
+    client_id: Joi.number().required(),
+  }),
+  updateInvoice: Joi.object({
+    id: Joi.number().required(),
+    approved_by: Joi.number().required(),
+    amount: Joi.number().required(),
+  }),
+  pagination: Joi.object({
+    page: Joi.number().required(),
+    limit: Joi.number().required(),
+    client_id: Joi.number().optional(),
   }),
 };

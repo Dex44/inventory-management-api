@@ -6,5 +6,5 @@
 */
 module.exports = { 
     secret: process.env.JWT_SECRET,
-    ttl: 1440
+    ttl: 20440
 }

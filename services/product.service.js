@@ -19,6 +19,13 @@ exports.findProductById = (product_id) => {
     },
   });
 };
+exports.findProductByName = (product_name) => {
+  return Product.findOne({
+    where: {
+      product_name: product_name,
+    },
+  });
+};
 
 exports.updateProduct = (product, product_id) => {
   return Product.update(

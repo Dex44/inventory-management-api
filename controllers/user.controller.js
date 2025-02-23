@@ -4,7 +4,7 @@ const bcryptUtil = require("../utils/bcrypt.util");
 
 exports.listUsers = async (req, res) => {
   try {
-    const { page = 1, limit = 10 } = req.params; // Default values: page 1, 10 users per page
+    const { page = 1, limit = 10 } = req.body; // Default values: page 1, 10 users per page
     const offset = (page - 1) * limit;
 
     const users = await UserService.getUserDetailsWithPagination(limit, offset);

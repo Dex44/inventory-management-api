@@ -158,6 +158,10 @@ const Product = sequelize.define(
       type: DataTypes.TEXT,
       allowNull: true,
     },
+    image_path: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
     quantity: {
       type: DataTypes.INTEGER,
       defaultValue: 0,
@@ -249,6 +253,82 @@ const ProductImage = sequelize.define('ProductImage', {
   timestamps: false
 });
 
+const Client = sequelize.define('Client', {
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true
+  },
+  name: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  mobile: {
+    type: DataTypes.INTEGER,
+    allowNull: false
+  },
+  email: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  address: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+}, {
+  timestamps: false
+});
+
+const Invoice = sequelize.define('Invoice', {
+  id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true
+  },
+  created_by: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+          model: User,
+          key: 'user_id'
+      },
+      onDelete: 'CASCADE'
+  },
+  approved_by: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+          model: User,
+          key: 'user_id'
+      },
+      onDelete: 'SET NULL'
+  },
+  amount: {
+      type: DataTypes.DECIMAL(10, 2), // Storing array of client IDs
+      allowNull: false
+  },
+  client_id: {
+      type: DataTypes.INTEGER, // Storing array of client IDs
+      allowNull: false
+  },
+  is_approved: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+  },
+  created_at: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW
+  },
+  updated_at: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW
+  }
+}, {
+  timestamps: true,
+  createdAt: 'created_at',
+  updatedAt: 'updated_at'
+});
+
 // Associations
 Role.hasMany(User, { foreignKey: "role_id" });
 User.belongsTo(Role, { foreignKey: "role_id" });
@@ -272,7 +352,6 @@ Permission.belongsToMany(Role, {
 User.hasMany(AuditLog, { foreignKey: "user_id" });
 AuditLog.belongsTo(User, { foreignKey: "user_id" });
 
-// Associations
 Role.hasMany(RolePermission, { foreignKey: 'role_id' });
 RolePermission.belongsTo(Role, { foreignKey: 'role_id' });
 
@@ -284,8 +363,11 @@ User.belongsTo(Role, { foreignKey: 'role_id' });
 
 User.hasMany(User, { foreignKey: 'created_by', as: 'CreatedBy' });
 
+Invoice.belongsTo(User, { foreignKey: 'created_by', as: 'creator' });
+Invoice.belongsTo(User, { foreignKey: 'approved_by', as: 'approver' });
 
-module.exports = { Role, User, Permission, RolePermission, Product, AuditLog, ProductImage, DbBootstrap };
+
+module.exports = { Role, User, Permission, RolePermission, Product, AuditLog, ProductImage, Client, Invoice, DbBootstrap };
 
 
 (async () => {
