@@ -180,9 +180,12 @@ exports.listProducts = async (req, res) => {
     // Calculate offset and limit
     const offset = (page - 1) * limit;
 
+    const whereClause = {};
+        if (clientId) whereClause.product_name = product_name;
+
     // Fetch products with pagination
     const { rows: products, count: total } =
-      await ProductService.getProductsWithPagination(limit, offset);
+      await ProductService.getProductsWithPagination(whereClause, limit, offset);
 
     if (products.length === 0) {
       return res.status(404).json({

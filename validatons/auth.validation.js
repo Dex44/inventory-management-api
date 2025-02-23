@@ -113,5 +113,6 @@ module.exports = {
     page: Joi.number().required(),
     limit: Joi.number().required(),
     client_id: Joi.number().optional(),
+    product_name: Joi.string().optional(),
   }),
 };

@@ -48,8 +48,9 @@ exports.deleteProduct = async (product_id) => {
   });
 };
 
-exports.getProductsWithPagination = async (limit, offset) => {
+exports.getProductsWithPagination = async (whereClause, limit, offset) => {
   return Product.findAndCountAll({
+    where: whereClause,
     attributes: [
       "product_id",
       "product_name",
