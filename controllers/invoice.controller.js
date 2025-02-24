@@ -12,7 +12,13 @@ exports.createInvoice = async (req, res) => {
       approved_by: req.body.approved_by,
         is_approved: req.body.is_approved || false,
       };
-  
+
+      req.body.products.map(async (item) => {
+        const productDetails = await ProductService.findProductById(item.id)
+        const updatedProduct = await ProductService.updateProduct({quantity: productDetails.quantity - item.quantity}, item.id)
+        console.log("updatedProduct",updatedProduct);
+        
+      })
       const invoice = await InvoiceService.createInvoice(invoiceData);
   
       return res.json({
@@ -58,7 +64,8 @@ exports.createInvoice = async (req, res) => {
         
         const invoices = await InvoiceService.findAndCountAll(whereClause,limit,offset)
 
-        const productIds = await invoices.rows.flatMap(inv => inv.products || []);
+        // const productIds = await invoices.rows.flatMap(inv => inv.products || []);
+        const productIds = await invoices.rows.flatMap(inv => inv.products?.map(product => product.id) || []);
 
         const products = await ProductService.findAll({ product_id: { [Op.in]: productIds } })
         
