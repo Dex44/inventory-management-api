@@ -103,11 +103,20 @@ module.exports = {
     created_by: Joi.number().required(),
     amount: Joi.number().required(),
     client_id: Joi.number().required(),
+    is_approved: Joi.boolean().required(),
+    products: Joi.array().items(Joi.number().integer().required()).required(),
+    approved_by: Joi.number().integer().when('is_approved', {
+      is: true,
+      then: Joi.required(),
+      otherwise: Joi.forbidden()
+  }),
   }),
   updateInvoice: Joi.object({
     id: Joi.number().required(),
     approved_by: Joi.number().required(),
     amount: Joi.number().required(),
+    is_approved: Joi.boolean().required(),
+    products: Joi.array().items(Joi.number().integer().required()).required(),
   }),
   pagination: Joi.object({
     page: Joi.number().required(),

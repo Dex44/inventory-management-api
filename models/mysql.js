@@ -311,6 +311,10 @@ const Invoice = sequelize.define('Invoice', {
       type: DataTypes.INTEGER, // Storing array of client IDs
       allowNull: false
   },
+  products: {
+    type: Sequelize.JSON, // JSON DataType in Sequelize
+    allowNull: false,
+  },
   is_approved: {
       type: DataTypes.BOOLEAN,
       defaultValue: false

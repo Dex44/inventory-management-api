@@ -1,4 +1,4 @@
-const { Invoice, User, Role, Client } = require("../models/mysql");
+const { Invoice, User, Role, Client, Product } = require("../models/mysql");
 
 exports.createInvoice = (invoice) => {
   return Invoice.create(invoice);
@@ -29,6 +29,7 @@ exports.findById = (id) => {
     return Invoice.findAndCountAll(
         {
           where: whereClause,
+          attributes: ["id", "amount", "products", "created_at","updated_at"],
           order: [["created_at", "DESC"]],
           limit: parseInt(limit),
           offset: parseInt(offset),

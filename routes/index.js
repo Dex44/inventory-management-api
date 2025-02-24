@@ -63,8 +63,8 @@ router.post('/update-client', AuthGuard, validate(schema.updateClient), ErrorHan
 router.post('/delete-client', AuthGuard, validate(schema.deleteClient), ErrorHandler(ClientController.deleteClient));
 router.post('/list-clients', AuthGuard, validate(schema.pagination), ErrorHandler(ClientController.listClients));
 router.post('/create-invoice', AuthGuard, validate(schema.createInvoice), ErrorHandler(InvoiceController.createInvoice));
-router.post('/update-invoice', AuthGuard, validate(schema.updateInvoice), ErrorHandler(InvoiceController.updateClient));
-router.post('/list-invoice', AuthGuard, validate(schema.pagination), ErrorHandler(InvoiceController.getClient));
+router.post('/update-invoice', AuthGuard, validate(schema.updateInvoice), ErrorHandler(InvoiceController.updateInvoice));
+router.post('/list-invoice', AuthGuard, validate(schema.pagination), ErrorHandler(InvoiceController.getInvoice));
 
 router.all('*',  (req, res) => res.status(400).json({ message: 'Bad Request.'}))
 

@@ -186,7 +186,7 @@ exports.listProducts = async (req, res) => {
 
     // Fetch products with pagination
     const { rows: products, count: total } =
-      await ProductService.getProductsWithPagination(whereClause, limit, offset);
+      page !== 0 ? await ProductService.getProductsWithPagination(whereClause, limit, offset) : await ProductService.getProducts();
 
     if (products.length === 0) {
       return res.status(404).json({
@@ -194,22 +194,14 @@ exports.listProducts = async (req, res) => {
       });
     }
 
-    // Include full image URLs for each product
     const productsWithImages = await Promise.all(
       products.map(async (product) => {
-        const images = await ProductService.getProductImages(
-          product.product_id
-        ); // Fetch image details for the product
-        // Add the full URL for images
-        const imagesWithUrls = images.map((image) => ({
-          id: image.id,
-          image_url: `http://${req.headers.host}/uploads/${path.basename(
-            image.image_path
-          )}`, // Full URL
-        }));
+        const imagesWithUrls = `http://${req.headers.host}/uploads/${path.basename(
+            product.image_path
+          )}`
         return {
           ...product,
-          images: imagesWithUrls, // Include images with full URLs
+          image: imagesWithUrls,
         };
       })
     );
