@@ -17,6 +17,7 @@ exports.findProductById = (product_id) => {
     where: {
       product_id: product_id,
     },
+    raw: true
   });
 };
 exports.findProductByName = (product_name) => {

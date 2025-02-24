@@ -161,7 +161,11 @@ exports.getProductById = async (req, res) => {
         message: "Product does not exist.",
       });
     }
-
+    
+    product.image = `http://${req.headers.host}/uploads/${path.basename(
+      product.image_path
+    )}`
+    
     return res.json({
       data: product,
       message: "Product retrieved successfully.",
