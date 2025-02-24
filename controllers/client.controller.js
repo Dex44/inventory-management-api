@@ -95,3 +95,28 @@ exports.createClient = async (req, res) => {
       return res.status(500).json({ message: "Internal Server Error." });
     }
   };
+
+  exports.getClientById = async (req, res) => {
+    try {
+      const { id } = req.params; // Get product_id from route parameters
+  
+      // Find product by ID
+      const client = await ClientService.findClientById(id);
+  
+      if (!client) {
+        return res.status(404).json({
+          message: "Client does not exist.",
+        });
+      }
+  
+      return res.json({
+        data: client,
+        message: "Client retrieved successfully.",
+      });
+    } catch (error) {
+      console.error("Error fetching client:", error);
+      return res.status(500).json({
+        message: "Internal Server Error.",
+      });
+    }
+  };

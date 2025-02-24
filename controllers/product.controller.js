@@ -175,13 +175,14 @@ exports.getProductById = async (req, res) => {
 
 exports.listProducts = async (req, res) => {
   try {
-    const { page = 1, limit = 10 } = req.body; // Default page = 1, limit = 10
-
+    const { page = 1, limit = 10, product_name } = req.body; // Default page = 1, limit = 10
+    console.log("product_name", req.body);
+    
     // Calculate offset and limit
     const offset = (page - 1) * limit;
 
     const whereClause = {};
-        if (clientId) whereClause.product_name = product_name;
+        if (product_name) whereClause.product_name = product_name;
 
     // Fetch products with pagination
     const { rows: products, count: total } =

@@ -365,6 +365,7 @@ User.hasMany(User, { foreignKey: 'created_by', as: 'CreatedBy' });
 
 Invoice.belongsTo(User, { foreignKey: 'created_by', as: 'creator' });
 Invoice.belongsTo(User, { foreignKey: 'approved_by', as: 'approver' });
+Invoice.belongsTo(Client, { foreignKey: 'client_id', as: 'client' });
 
 
 module.exports = { Role, User, Permission, RolePermission, Product, AuditLog, ProductImage, Client, Invoice, DbBootstrap };
