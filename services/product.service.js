@@ -62,6 +62,7 @@ exports.getProductsWithPagination = async (whereClause, limit, offset) => {
     ], // Select required attributes
     limit: parseInt(limit, 10), // Ensure `limit` is parsed as an integer
     offset: parseInt(offset, 10), // Ensure `offset` is parsed as an integer
+    raw: true
   });
 };
 exports.getProducts = async () => {  

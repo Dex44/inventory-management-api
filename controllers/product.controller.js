@@ -3,6 +3,7 @@ const path = require("path");
 
 const ProductService = require("../services/product.service");
 const ProductImageService = require("../services/productImage.service");
+const { Op } = require("sequelize");
 
 exports.createProduct = async (req, res) => {
   const isExist = await ProductService.findProductByName(req.body.product_name);
@@ -182,7 +183,7 @@ exports.listProducts = async (req, res) => {
     const offset = (page - 1) * limit;
 
     const whereClause = {};
-        if (product_name) whereClause.product_name = product_name;
+        if (product_name) whereClause.product_name = { [Op.like]: `%${product_name}%` };;
 
     // Fetch products with pagination
     const { rows: products, count: total } =
