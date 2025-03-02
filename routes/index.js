@@ -52,6 +52,7 @@ router.post('/delete-user', AuthGuard, validate(schema.deleteUser), ErrorHandler
 router.get('/get-user/:id', AuthGuard, ErrorHandler(UserController.getUserById));
 router.get('/get-product/:id', AuthGuard, ErrorHandler(ProductController.getProductById));
 router.get('/get-client/:id', AuthGuard, ErrorHandler(ClientController.getClientById));
+router.get('/get-invoice/:id', AuthGuard, ErrorHandler(InvoiceController.getInvoiceById));
 router.post('/list-products', AuthGuard, validate(schema.pagination), ErrorHandler(ProductController.listProducts));
 router.post('/create-product', AuthGuard, upload.single('image'), validate(schema.createProduct), ErrorHandler(ProductController.createProduct));
 router.post('/update-product', AuthGuard, upload.single('image'), validate(schema.updateProduct), ErrorHandler(ProductController.updateProduct));

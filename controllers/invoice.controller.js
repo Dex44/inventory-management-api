@@ -15,9 +15,7 @@ exports.createInvoice = async (req, res) => {
 
       req.body.products.map(async (item) => {
         const productDetails = await ProductService.findProductById(item.id)
-        const updatedProduct = await ProductService.updateProduct({quantity: productDetails.quantity - item.quantity}, item.id)
-        console.log("updatedProduct",updatedProduct);
-        
+        await ProductService.updateProduct({quantity: productDetails.quantity - item.quantity}, item.id)
       })
       const invoice = await InvoiceService.createInvoice(invoiceData);
   
@@ -65,22 +63,22 @@ exports.createInvoice = async (req, res) => {
         const invoices = await InvoiceService.findAndCountAll(whereClause,limit,offset)
 
         // const productIds = await invoices.rows.flatMap(inv => inv.products || []);
-        const productIds = await invoices.rows.flatMap(inv => inv.products?.map(product => product.id) || []);
+        // const productIds = await invoices.rows.flatMap(inv => inv.products?.map(product => product.id) || []);
 
-        const products = await ProductService.findAll({ product_id: { [Op.in]: productIds } })
+        // const products = await ProductService.findAll({ product_id: { [Op.in]: productIds } })
         
-        const productMap = {};
-        products.forEach(product => {
-          productMap[product.product_id] = product;
-        });
+        // const productMap = {};
+        // products.forEach(product => {
+        //   productMap[product.product_id] = product;
+        // });
         
-        const response = invoices.rows.map(inv => ({
-          ...inv.toJSON(),
-          products: (inv.products || []).map(id => productMap[id] || null).filter(p => p)
-        }));
+        // const response = invoices.rows.map(inv => ({
+        //   ...inv.toJSON(),
+        //   products: (inv.products || []).map(id => productMap[id] || null).filter(p => p)
+        // }));
 
         return res.json({
-            data: response,
+            data: invoices.rows,
             total: invoices.count,
             currentPage: page,
             totalPages: Math.ceil(invoices.count / limit),
@@ -90,3 +88,28 @@ exports.createInvoice = async (req, res) => {
         return res.status(500).json({ message: "Error fetching invoices." });
     }
   };
+
+    exports.getInvoiceById = async (req, res) => {
+      try {
+        const { id } = req.params; // Get product_id from route parameters
+    
+        // Find product by ID
+        const invoice = await InvoiceService.findById(id);
+    
+        if (!invoice) {
+          return res.status(404).json({
+            message: "Invoice does not exist.",
+          });
+        }
+    
+        return res.json({
+          data: invoice,
+          message: "Invoice retrieved successfully.",
+        });
+      } catch (error) {
+        console.error("Error fetching invoice:", error);
+        return res.status(500).json({
+          message: "Internal Server Error.",
+        });
+      }
+    };
